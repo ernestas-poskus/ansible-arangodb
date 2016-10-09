@@ -1,2 +1,66 @@
 ---
 # tasks file for ansible-arangodb
+- name: Add distribution repo URL
+  include: "{{ ansible_distribution }}.yml"
+  when: ansible_distribution in ['CentOS']
+
+- name: Ensure arangodb group exists
+  group:
+    name: "{{ arangodb_group }}"
+    state: present
+
+- name: Ensure arangodb user exists
+  user:
+    name: "{{ arangodb_owner }}"
+    state: present
+    groups: "{{ arangodb_group }}"
+    createhome: no
+
+- name: Install the package for arangodb
+  package:
+    name: "{{ arangodb_package_name }}"
+    state: latest
+  notify:
+    - "stop arangodb"
+
+- name: "Creating mkdir {{ item }}"
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ arangodb_owner }}"
+    group: "{{ arangodb_group }}"
+    mode: 0770
+  with_items:
+    - "{{ arangodb_storage_directory }}"
+    - "{{ arangodb_log_directory }}"
+    - "{{ arangodb_startup_directory }}"
+    - "{{ arangodb_app_path }}"
+    - "{{ arangodb_cluster_data_directory }}"
+    - "{{ arangodb_cluster_log_directory }}"
+
+- name: "Make config file {{ item }}"
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/{{ arangodb_package_name }}/{{ item }}"
+    owner: arangodb
+    group: arangodb
+    mode: 0640
+  with_items:
+    - arangod.conf
+    - arangobench.conf
+    - arangosh.conf
+  notify:
+  - "restart arangodb"
+
+- name: "Remove default ArangoDB init script"
+  file:
+    path: "/etc/init.d/{{ arangodb_service_name }}"
+    state: absent
+
+- name: Install ArangoDB systemd service
+  template:
+    src: arangodb3.service.j2
+    dest: /lib/systemd/system/arangodb3.service
+  notify:
+    - reload daemon
+    - "restart arangodb"

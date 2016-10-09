@@ -1,0 +1,78 @@
+# ArangoDB configuration file
+#
+# Documentation:
+# https://docs.arangodb.com/Manual/Administration/Configuration/
+#
+
+[database]
+directory = {{arangodb_storage_directory}}
+# directory = @HOMEDRIVE@/@HOMEPATH@/arangodb3/databases
+
+maximal-journal-size = {{arangodb_maximal_journal_size}}
+
+[server]
+# Specify the endpoint for HTTP requests by clients.
+#  tcp://ipv4-address:port
+#  tcp://[ipv6-address]:port
+#  ssl://ipv4-address:port
+#  ssl://[ipv6-address]:port
+#  unix:///path/to/socket
+#
+# Examples:
+#   endpoint = tcp://0.0.0.0:8529
+#   endpoint = tcp://127.0.0.1:8529
+#   endpoint = tcp://localhost:8529
+#   endpoint = tcp://myserver.arangodb.com:8529
+#   endpoint = tcp://[::]:8529
+#   endpoint = tcp://[fe80::21a:5df1:aede:98cf]:8529
+#
+{% for endpoint in arangodb_endpoints %}
+endpoint = {{endpoint}}
+{% endfor %}
+
+# resuse a port on restart or wait until it is freed by the operating system
+# reuse-address = false
+
+authentication = {{arangodb_authentication}}
+
+# number of server threads. use 0 to make arangod determine the
+# number of threads automatically, based on available CPUs
+threads = {{ arangodb_server_threads }}
+
+# gather server statistics
+statistics = {{arangodb_statistics}}
+
+# the user and group are normally set in the start script
+uid = {{arangodb_owner}}
+gid = {{arangodb_group}}
+
+[scheduler]
+# number of threads used for I/O, use 0 to make arangod determine
+# the number of threads automatically
+threads = {{arangodb_scheduler_threads}}
+
+[javascript]
+startup-directory = {{arangodb_startup_directory}}
+app-path = {{arangodb_app_path}}
+
+# number of V8 contexts available for JavaScript execution. use 0 to
+# make arangod determine the number of contexts automatically.
+v8-contexts = {{arangodb_v8_contexts}}
+
+[foxx]
+# enable Foxx queues in the server
+queues = {{arangodb_queues}}
+
+# interval (seconds) to use for polling jobs in Foxx queues
+queues-poll-interval = {{arangodb_queues_poll_interval}}
+
+[log]
+level = {{arangodb_level}}
+file = {{arangodb_file}}
+
+[cluster]
+data-path = {{arangodb_cluster_data_directory}}
+log-path = {{arangodb_cluster_log_directory}}
+arangod-path = @SBINDIR@/arangod@PROGRAM_SUFFIX@
+dbserver-config = @SYSCONFDIR@/arangod.conf
+coordinator-config = @SYSCONFDIR@/arangod.conf

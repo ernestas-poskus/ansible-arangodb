@@ -1,0 +1,7 @@
+---
+# tasks file for ansible-arangodb
+ - name: Add key for Debian systems
+   apt_key: url=https://www.arangodb.com/repositories/arangodb3/{{ ansible_distribution }}_{{ansible_distribution_major_version}}.0/Release.key state=present
+
+ - name: Add repo for Debian systems
+   apt_repository: repo='deb https://www.arangodb.com/repositories/arangodb3/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.0 /' state=present filename=arangodb

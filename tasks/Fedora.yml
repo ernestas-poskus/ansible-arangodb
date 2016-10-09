@@ -1,0 +1,4 @@
+---
+# tasks file for ansible-arangodb
+ - name: Add repo for Fedora
+   get_url: url=https://www.arangodb.com/repositories/arangodb3/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/arangodb.repo  dest=/etc/yum.repos.d/arangodb.repo

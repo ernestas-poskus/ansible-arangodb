@@ -1,38 +1,101 @@
-Role Name
+ansible-arangodb
 =========
 
-A brief description of the role goes here.
+Ansible playbook for installing ArangoDB 3
+
+Installation
+------------
+
+ansible-galaxy install ernestas-poskus.ansible-arangodb
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+None.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yaml
+---
+arangodb_service_name: 'arangodb3'
+arangodb_package_name: 'arangodb3'
+
+# defaults file for arangodb
+arangodb_storage_directory: '/var/lib/arangodb3'
+
+# log directory
+arangodb_log_directory: '/var/log/arangodb3'
+
+arangodb_endpoints:
+  - 'tcp://127.0.0.1:8529'
+  - "tcp://{{ ansible_default_ipv4['address'] }}:8529"
+
+arangodb_authentication: 'true'
+arangodb_user: 'root'
+arangodb_user_pass: ''
+
+arangodb_maximal_journal_size: 33554432
+
+# number of server threads. use 0 to make arangod determine the
+# number of threads automatically, based on available CPUs
+arangodb_server_threads: 0
+
+# gather server statistics
+arangodb_statistics: 'true'
+
+# the user and group are normally set in the start script
+arangodb_owner: arangodb
+arangodb_group: arangodb
+
+# number of threads used for I/O, use 0 to make arangod determine
+# the number of threads automatically
+arangodb_scheduler_threads: 0
+
+# Javascript
+arangodb_startup_directory: '/usr/share/arangodb3/js'
+arangodb_app_path: '/var/lib/arangodb3-apps'
+
+# number of V8 contexts available for JavaScript execution. use 0 to
+# make arangod determine the number of contexts automatically.
+arangodb_v8_contexts: 0
+
+# enable Foxx queues in the server
+arangodb_queues: 'false'
+
+# interval (seconds) to use for polling jobs in Foxx queues
+arangodb_queues_poll_interval: 1
+
+# Log
+arangodb_level: 'info'
+arangodb_file: "{{arangodb_log_directory}}/arangod.log"
+
+# Cluster
+arangodb_cluster_data_directory: '/var/lib/arangodb3/cluster'
+arangodb_cluster_log_directory: '/var/log/arangodb3/cluster'
+```
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yamlp
+- name: Installing ArangoDB
+  hosts: arangodb
+  sudo: yes
+  roles:
+    - role: ernestas-poskus.ansible-arangodb
+```
 
 License
 -------
 
-BSD
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Twitter: @ernestas_poskus
