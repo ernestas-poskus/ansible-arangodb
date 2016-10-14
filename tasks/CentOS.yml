@@ -1,0 +1,9 @@
+---
+# tasks file for ansible-arangodb
+ - name: Add repo for CentOS version 6
+   get_url: url=https://www.arangodb.com/repositories/arangodb3/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/arangodb.repo  dest=/etc/yum.repos.d/arangodb.repo
+   when: ansible_distribution_major_version == "6"
+
+ - name: Add repo for CentOS version 7
+   get_url: url=https://www.arangodb.com/repositories/arangodb3/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/arangodb.repo  dest=/etc/yum.repos.d/arangodb.repo
+   when: ansible_distribution_major_version == "7"

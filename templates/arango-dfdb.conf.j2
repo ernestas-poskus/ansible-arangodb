@@ -1,0 +1,29 @@
+# config file for arango-dfdb
+
+[database]
+auto-upgrade = false
+upgrade-check = false
+directory= /var/lib/arangodb3
+
+[server]
+rest-server = false
+authentication = true
+# username = root
+# password = 
+uid = arangodb
+
+statistics = false
+# set number of threads to 1 so we don't have concurrency
+threads = 1
+
+[javascript]
+startup-directory = /usr/share/arangodb3/js
+app-path = /var/lib/arangodb3-apps
+script = /usr/share/arangodb3/js/server/arango-dfdb.js
+v8-contexts = 1
+
+[foxx]
+queues = false
+
+[log]
+level = info

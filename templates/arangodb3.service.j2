@@ -1,0 +1,22 @@
+# {{ansible_managed}}
+
+[Unit]
+Description=ArangoDB3 service
+After=network.target
+Wants=network.target
+
+[Service]
+ExecStartPre=/usr/sbin/arangod --server.rest-server false --database.auto-upgrade true
+ExecStart=/usr/sbin/arangod --log.foreground-tty true --temp.path "/var/tmp/arangod"
+
+Restart=always
+RestartSec=10
+TimeoutSec=20
+User={{arangodb_owner}}
+Group={{arangodb_group}}
+StandardOutput=journal
+StandardError=journal
+LimitNOFILE=131072
+
+[Install]
+WantedBy=multi-user.target

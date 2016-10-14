@@ -3,11 +3,6 @@
   connection: local
   remote_user: root
   tasks:
-    - shell: "ps aux | grep -i arangodb3"
-      register: status
-      failed_when: status.rc != 0
-      when: ansible_service_mgr != 'systemd'
-
     - shell: "systemctl status arangodb3 | grep running"
       register: status
       failed_when: status.rc != 0

@@ -1,0 +1,11 @@
+[console]
+pretty-print = true
+
+[server]
+endpoint = {{ arangodb_endpoints[0] }}
+authentication = {{ arangodb_authentication }}
+username = {{ arangodb_user }}
+password = {{ arangodb_user_pass }}
+
+[javascript]
+startup-directory = {{ arangodb_startup_directory }}
